@@ -1,0 +1,52 @@
+
+
+{% extends "index.html" %}
+
+{% block content %}
+
+
+
+ <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">TestId</th>
+                <th scope="col">Question name</th>
+                <th scope="col">Variants</th>
+            </tr>
+        </thead>
+        <tr>
+        {% for question in questions %}
+
+            <td> {{question.test_id }} </td>
+            <td> {{question.question_text}} </td>
+            <td>
+                <ul>
+                    {% for variant in question.question_variants %}
+                        <form method="post" action="/question_variant/{{ variant.answer_variant_id }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <li>
+                                <input name="answer_variant_text" value="{{variant.answer_variant_text}}" required>
+                                <button type="submit" class="btn btn-warning">Edit</button>
+                                <button onclick="location.href='/question_variant/{{  variant.answer_variant_id }}/delete'" type="button" class="btn btn-danger" >DEL</button>
+                            </li>
+                        </form>
+                    {% endfor %}
+                    <form method="post" action="/question_variant">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <input type="hidden" name="question_id" value="{{ question.question_id }}">
+                            <input name="answer_variant_text" required>
+                            <button type="submit" class="btn btn-success">New Question</button>
+                        </form>
+                </ul>
+            </td>
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+ </div>
+
+
+{% endblock %}
