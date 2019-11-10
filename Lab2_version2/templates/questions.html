@@ -1,0 +1,51 @@
+
+
+{% extends "index.html" %}
+
+{% block content %}
+
+
+
+ <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Test Name</th>
+                <th scope="col">Test variant</th>
+                <th scope="col">Questions</th>
+            </tr>
+        </thead>
+        <tr>
+        {% for test in tests %}
+            <td> {{test.test_name }} </td>
+            <td> {{test.test_variant}} </td>
+            <td>
+                <ul>
+                    {% for question in test.orm_questions %}
+                        <form method="post" action="/question/{{ question.question_id }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <li>
+                                <input name="question_text" value="{{question.question_text}}" required>
+                                <button type="submit" class="btn btn-warning">Edit</button>
+                                <button onclick="location.href='/question/{{ question.question_id }}/delete'" type="button" class="btn btn-danger" >DEL</button>
+                            </li>
+                        </form>
+                    {% endfor %}
+                <form method="post" action="/question">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="test_id" value="{{ test.test_id }}">
+                    <input name="question_text" required>
+                    <button type="submit" class="btn btn-success">New Question</button>
+                </form>
+                </ul>
+            </td>
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+ </div>
+
+
+{% endblock %}
